@@ -6,17 +6,21 @@ with urllib.request.urlopen('http://www.decal.org/courses') as response:
 html = str(html)
 z = re.findall('href=.(\d\d\d\d).', html)
 
-# Write obtained emails to a local file
+# Extract emails
 y = []
 for url in z:
     with urllib.request.urlopen('http://www.decal.org/courses/'+url) as response:
         html = response.read()
     html = str(html)
     y += [re.search(r'Course Contact:</strong> ([\w .()-]+)', html).group()]
+
+# Email formatting
 j = []
 for email in y:
-    k = re.sub('\w+(.AT.)\w+', '@', email) # Email formatting
+    k = re.sub('\w+(.AT.)\w+', '@', email)
     j += [k]
+
+# Print to file
 file = open('Decal Emails','w')
 for email in j:
     file.write(email + '\n')
